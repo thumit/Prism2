@@ -1,7 +1,24 @@
+all records of the optimal solution
+Select * from summarize_output_05_management_details
+----------
+all records of the optimal solution with yield table details
+SELECT * FROM summarize_output_05_management_details LEFT JOIN yield_tables
+ON 
+summarize_output_05_management_details.prescription = yield_tables.prescription 
+AND 
+summarize_output_05_management_details.row_id = yield_tables.row_id
+----------
 ---------------------------------------------------------LOGIC CHECK-----------------------------------------------------
 
 ----------
-1.0. incomplete database records
+1.0. list duplicated rows in the yield_tables
+SELECT prescription, row_id
+FROM yield_tables
+GROUP BY prescription, row_id
+HAVING COUNT(prescription || row_id) >1
+ORDER BY prescription, CAST(row_id AS DECMAL)
+----------
+1.1. incomplete database records
 SELECT 
 
 DISTINCT prescription, CAST(row_id AS DECIMAL) as row_id 
@@ -10,7 +27,7 @@ FROM summarize_output_05_management_details WHERE data_connection NOT LIKE 'good
 
 ORDER BY prescription, row_id
 ----------
-1.1. age-unmatching database records
+1.2. age-unmatching database records
 SELECT 
 DISTINCT yield_tables.prescription AS prescription, 
 CAST(yield_tables.row_id AS DECIMAL) as row_id 
@@ -26,7 +43,7 @@ summarize_output_05_management_details.var_age NOT LIKE yield_tables.age_class
 
 ORDER BY prescription, row_id
 ----------
-1.2. variables associated with incomplete database records
+1.3. variables associated with incomplete database records
 SELECT 
 
 CAST(iteration AS DECIMAL) as iteration, var_id, var_name, data_connection, prescription, CAST(row_id AS DECIMAL) as row_id
@@ -35,7 +52,7 @@ FROM summarize_output_05_management_details WHERE data_connection NOT LIKE 'good
 
 ORDER BY iteration, prescription, row_id
 ----------
-1.3. variables associated with age-unmatching database records: var_age and age_class are different
+1.4. variables associated with age-unmatching database records: var_age and age_class are different
 SELECT 
 iteration, var_id, var_name, var_age, age_class, 
 yield_tables.prescription AS prescription, 
@@ -52,6 +69,35 @@ summarize_output_05_management_details.var_age NOT LIKE yield_tables.age_class
 
 ORDER BY iteration, prescription, row_id
 ----------
+1.5.a. every period area check 1
+SELECT
+CAST(iteration AS DECIMAL) AS iteration, CAST(var_period AS DECIMAL) AS period, 
+ROUND(SUM(var_value), 2) AS area
+FROM
+
+(
+SELECT *
+FROM summarize_output_05_management_details LEFT JOIN yield_tables
+ON 
+summarize_output_05_management_details.prescription = yield_tables.prescription 
+AND 
+summarize_output_05_management_details.row_id = yield_tables.row_id
+)
+
+GROUP BY iteration, period
+ORDER BY iteration, period
+----------
+1.5.b. every period area check 2
+SELECT
+CAST(iteration AS DECIMAL) AS iteration, CAST(var_period AS DECIMAL) AS period, 
+ROUND(SUM(var_value), 2) AS area
+FROM
+
+summarize_output_05_management_details
+
+GROUP BY iteration, period
+ORDER BY iteration, period
+----------
 ---------------------------------------------------MANAGEMENT AREA-----------------------------------------------
 
 ----------
@@ -62,7 +108,8 @@ ROUND(SUM(CASE WHEN t.method = 'PB' THEN t.grouped_area END), 1) AS PB_area,
 ROUND(SUM(CASE WHEN t.method = 'GS' THEN t.grouped_area END), 1) AS GS_area,
 ROUND(SUM(CASE WHEN t.method = 'EA' THEN t.grouped_area END), 1) AS EA_area,
 ROUND(SUM(CASE WHEN t.method = 'MS' THEN t.grouped_area END), 1) AS MS_area,
-ROUND(SUM(CASE WHEN t.method = 'BS' THEN t.grouped_area END), 1) AS BS_area
+ROUND(SUM(CASE WHEN t.method = 'BS' THEN t.grouped_area END), 1) AS BS_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_area
 FROM
 
 
@@ -88,7 +135,8 @@ ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E
 ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_area,
 ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_area,
 ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area
+ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_area
 FROM
 
 
@@ -111,7 +159,8 @@ ROUND(SUM(CASE WHEN method = 'PB' THEN grouped_area END), 1) AS PB_area,
 ROUND(SUM(CASE WHEN method = 'GS' THEN grouped_area END), 1) AS GS_area,
 ROUND(SUM(CASE WHEN method = 'EA' THEN grouped_area END), 1) AS EA_area,
 ROUND(SUM(CASE WHEN method = 'MS' THEN grouped_area END), 1) AS MS_area,
-ROUND(SUM(CASE WHEN method = 'BS' THEN grouped_area END), 1) AS BS_area
+ROUND(SUM(CASE WHEN method = 'BS' THEN grouped_area END), 1) AS BS_area,
+ROUND(SUM(CASE WHEN grouped_area > 0 THEN grouped_area END), 1) AS total_area
 FROM
 
 
@@ -142,7 +191,8 @@ ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E
 ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_area,
 ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_area,
 ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area
+ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_area
 FROM
 
 
@@ -169,7 +219,8 @@ ROUND(SUM(CASE WHEN t.method = 'PB' THEN t.grouped_area END), 1) AS PB_area,
 ROUND(SUM(CASE WHEN t.method = 'GS' THEN t.grouped_area END), 1) AS GS_area,
 ROUND(SUM(CASE WHEN t.method = 'EA' THEN t.grouped_area END), 1) AS EA_area,
 ROUND(SUM(CASE WHEN t.method = 'MS' THEN t.grouped_area END), 1) AS MS_area,
-ROUND(SUM(CASE WHEN t.method = 'BS' THEN t.grouped_area END), 1) AS BS_area
+ROUND(SUM(CASE WHEN t.method = 'BS' THEN t.grouped_area END), 1) AS BS_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_area
 FROM
 
 
@@ -194,7 +245,8 @@ ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E
 ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_area,
 ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_area,
 ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area
+ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_area
 FROM
 
 
@@ -216,7 +268,8 @@ ROUND(SUM(CASE WHEN method = 'PB' THEN grouped_area END), 1) AS PB_area,
 ROUND(SUM(CASE WHEN method = 'GS' THEN grouped_area END), 1) AS GS_area,
 ROUND(SUM(CASE WHEN method = 'EA' THEN grouped_area END), 1) AS EA_area,
 ROUND(SUM(CASE WHEN method = 'MS' THEN grouped_area END), 1) AS MS_area,
-ROUND(SUM(CASE WHEN method = 'BS' THEN grouped_area END), 1) AS BS_area
+ROUND(SUM(CASE WHEN method = 'BS' THEN grouped_area END), 1) AS BS_area,
+ROUND(SUM(CASE WHEN grouped_area > 0 THEN grouped_area END), 1) AS total_area
 FROM
 
 
@@ -246,7 +299,8 @@ ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E
 ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_area,
 ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_area,
 ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area
+ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_area
 FROM
 
 
@@ -268,14 +322,15 @@ GROUP BY iteration, period, activity
 --------------------------------------------------DISTURBANCE AREA------------------------------------------------
 
 ----------
-3.0. first period disturbance area by iteration, method
+3.0. first period stand-replacing disturbance area by iteration, method
 SELECT iteration,
-ROUND(SUM(CASE WHEN t.method = 'NG' THEN t.grouped_area END), 1) AS NG_area,
-ROUND(SUM(CASE WHEN t.method = 'PB' THEN t.grouped_area END), 1) AS PB_area,
-ROUND(SUM(CASE WHEN t.method = 'GS' THEN t.grouped_area END), 1) AS GS_area,
-ROUND(SUM(CASE WHEN t.method = 'EA' THEN t.grouped_area END), 1) AS EA_area,
-ROUND(SUM(CASE WHEN t.method = 'MS' THEN t.grouped_area END), 1) AS MS_area,
-ROUND(SUM(CASE WHEN t.method = 'BS' THEN t.grouped_area END), 1) AS BS_area
+ROUND(SUM(CASE WHEN t.method = 'NG' THEN t.grouped_area END), 1) AS NG_sr_area,
+ROUND(SUM(CASE WHEN t.method = 'PB' THEN t.grouped_area END), 1) AS PB_sr_area,
+ROUND(SUM(CASE WHEN t.method = 'GS' THEN t.grouped_area END), 1) AS GS_sr_area,
+ROUND(SUM(CASE WHEN t.method = 'EA' THEN t.grouped_area END), 1) AS EA_sr_area,
+ROUND(SUM(CASE WHEN t.method = 'MS' THEN t.grouped_area END), 1) AS MS_sr_area,
+ROUND(SUM(CASE WHEN t.method = 'BS' THEN t.grouped_area END), 1) AS BS_sr_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_sr_area
 FROM
 
 
@@ -291,18 +346,19 @@ HAVING grouped_area > 0) AS t
 WHERE period = 1
 GROUP BY iteration, period
 ----------
-3.1. first period disturbance area by iteration, method, forest_status
+3.1. first period stand-replacing disturbance area by iteration, method, forest_status
 SELECT iteration,
-ROUND(SUM(CASE WHEN t.method_status = 'NGE' THEN t.grouped_area END), 1) AS NG_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'PBE' THEN t.grouped_area END), 1) AS PB_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'GSE' THEN t.grouped_area END), 1) AS GS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAE' THEN t.grouped_area END), 1) AS EA_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'MSE' THEN t.grouped_area END), 1) AS MS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area
+ROUND(SUM(CASE WHEN t.method_status = 'NGE' THEN t.grouped_area END), 1) AS NG_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'PBE' THEN t.grouped_area END), 1) AS PB_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'GSE' THEN t.grouped_area END), 1) AS GS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'EAE' THEN t.grouped_area END), 1) AS EA_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'MSE' THEN t.grouped_area END), 1) AS MS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_sr_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_sr_area
 FROM
 
 
@@ -319,14 +375,15 @@ HAVING grouped_area > 0) AS t
 WHERE period = 1
 GROUP BY iteration, period
 ----------
-3.2. first period disturbance area by iteartion, method, activity
+3.2. first period stand-replacing disturbance area by iteartion, method, activity
 SELECT iteration, activity,
-ROUND(SUM(CASE WHEN method = 'NG' THEN grouped_area END), 1) AS NG_area,
-ROUND(SUM(CASE WHEN method = 'PB' THEN grouped_area END), 1) AS PB_area,
-ROUND(SUM(CASE WHEN method = 'GS' THEN grouped_area END), 1) AS GS_area,
-ROUND(SUM(CASE WHEN method = 'EA' THEN grouped_area END), 1) AS EA_area,
-ROUND(SUM(CASE WHEN method = 'MS' THEN grouped_area END), 1) AS MS_area,
-ROUND(SUM(CASE WHEN method = 'BS' THEN grouped_area END), 1) AS BS_area
+ROUND(SUM(CASE WHEN method = 'NG' THEN grouped_area END), 1) AS NG_sr_area,
+ROUND(SUM(CASE WHEN method = 'PB' THEN grouped_area END), 1) AS PB_sr_area,
+ROUND(SUM(CASE WHEN method = 'GS' THEN grouped_area END), 1) AS GS_sr_area,
+ROUND(SUM(CASE WHEN method = 'EA' THEN grouped_area END), 1) AS EA_sr_area,
+ROUND(SUM(CASE WHEN method = 'MS' THEN grouped_area END), 1) AS MS_sr_area,
+ROUND(SUM(CASE WHEN method = 'BS' THEN grouped_area END), 1) AS BS_sr_area,
+ROUND(SUM(CASE WHEN grouped_area > 0 THEN grouped_area END), 1) AS total_sr_area
 FROM
 
 
@@ -347,18 +404,19 @@ HAVING grouped_area > 0) AS t
 WHERE period = 1
 GROUP BY iteration, period, activity
 ----------
-3.3. first period disturbance area by iteration, method, activity, forest_status
+3.3. first period stand-replacing disturbance area by iteration, method, activity, forest_status
 SELECT iteration, activity,
-ROUND(SUM(CASE WHEN t.method_status = 'NGE' THEN t.grouped_area END), 1) AS NG_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'PBE' THEN t.grouped_area END), 1) AS PB_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'GSE' THEN t.grouped_area END), 1) AS GS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAE' THEN t.grouped_area END), 1) AS EA_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'MSE' THEN t.grouped_area END), 1) AS MS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area
+ROUND(SUM(CASE WHEN t.method_status = 'NGE' THEN t.grouped_area END), 1) AS NG_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'PBE' THEN t.grouped_area END), 1) AS PB_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'GSE' THEN t.grouped_area END), 1) AS GS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'EAE' THEN t.grouped_area END), 1) AS EA_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'MSE' THEN t.grouped_area END), 1) AS MS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_sr_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_sr_area
 FROM
 
 
@@ -379,14 +437,15 @@ HAVING grouped_area > 0) AS t
 WHERE period = 1
 GROUP BY iteration, period, activity
 ----------
-3.4. disturbance area by iteration, period, method
+3.4. stand-replacing disturbance area by iteration, period, method
 SELECT iteration, period,
-ROUND(SUM(CASE WHEN t.method = 'NG' THEN t.grouped_area END), 1) AS NG_area,
-ROUND(SUM(CASE WHEN t.method = 'PB' THEN t.grouped_area END), 1) AS PB_area,
-ROUND(SUM(CASE WHEN t.method = 'GS' THEN t.grouped_area END), 1) AS GS_area,
-ROUND(SUM(CASE WHEN t.method = 'EA' THEN t.grouped_area END), 1) AS EA_area,
-ROUND(SUM(CASE WHEN t.method = 'MS' THEN t.grouped_area END), 1) AS MS_area,
-ROUND(SUM(CASE WHEN t.method = 'BS' THEN t.grouped_area END), 1) AS BS_area
+ROUND(SUM(CASE WHEN t.method = 'NG' THEN t.grouped_area END), 1) AS NG_sr_area,
+ROUND(SUM(CASE WHEN t.method = 'PB' THEN t.grouped_area END), 1) AS PB_sr_area,
+ROUND(SUM(CASE WHEN t.method = 'GS' THEN t.grouped_area END), 1) AS GS_sr_area,
+ROUND(SUM(CASE WHEN t.method = 'EA' THEN t.grouped_area END), 1) AS EA_sr_area,
+ROUND(SUM(CASE WHEN t.method = 'MS' THEN t.grouped_area END), 1) AS MS_sr_area,
+ROUND(SUM(CASE WHEN t.method = 'BS' THEN t.grouped_area END), 1) AS BS_sr_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_sr_area
 FROM
 
 
@@ -401,18 +460,19 @@ HAVING grouped_area > 0) AS t
 
 GROUP BY iteration, period
 ----------
-3.5. disturbance area by iteration, period, method, forest_status
+3.5. stand-replacing disturbance area by iteration, period, method, forest_status
 SELECT iteration, period,
-ROUND(SUM(CASE WHEN t.method_status = 'NGE' THEN t.grouped_area END), 1) AS NG_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'PBE' THEN t.grouped_area END), 1) AS PB_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'GSE' THEN t.grouped_area END), 1) AS GS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAE' THEN t.grouped_area END), 1) AS EA_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'MSE' THEN t.grouped_area END), 1) AS MS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area
+ROUND(SUM(CASE WHEN t.method_status = 'NGE' THEN t.grouped_area END), 1) AS NG_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'PBE' THEN t.grouped_area END), 1) AS PB_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'GSE' THEN t.grouped_area END), 1) AS GS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'EAE' THEN t.grouped_area END), 1) AS EA_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'MSE' THEN t.grouped_area END), 1) AS MS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_sr_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_sr_area
 FROM
 
 
@@ -428,14 +488,15 @@ HAVING grouped_area > 0) AS t
 
 GROUP BY iteration, period
 ----------
-3.6. disturbance area by iteartion, period, method, activity
+3.6. stand-replacing disturbance area by iteartion, period, method, activity
 SELECT iteration, period, activity,
-ROUND(SUM(CASE WHEN method = 'NG' THEN grouped_area END), 1) AS NG_area,
-ROUND(SUM(CASE WHEN method = 'PB' THEN grouped_area END), 1) AS PB_area,
-ROUND(SUM(CASE WHEN method = 'GS' THEN grouped_area END), 1) AS GS_area,
-ROUND(SUM(CASE WHEN method = 'EA' THEN grouped_area END), 1) AS EA_area,
-ROUND(SUM(CASE WHEN method = 'MS' THEN grouped_area END), 1) AS MS_area,
-ROUND(SUM(CASE WHEN method = 'BS' THEN grouped_area END), 1) AS BS_area
+ROUND(SUM(CASE WHEN method = 'NG' THEN grouped_area END), 1) AS NG_sr_area,
+ROUND(SUM(CASE WHEN method = 'PB' THEN grouped_area END), 1) AS PB_sr_area,
+ROUND(SUM(CASE WHEN method = 'GS' THEN grouped_area END), 1) AS GS_sr_area,
+ROUND(SUM(CASE WHEN method = 'EA' THEN grouped_area END), 1) AS EA_sr_area,
+ROUND(SUM(CASE WHEN method = 'MS' THEN grouped_area END), 1) AS MS_sr_area,
+ROUND(SUM(CASE WHEN method = 'BS' THEN grouped_area END), 1) AS BS_sr_area,
+ROUND(SUM(CASE WHEN grouped_area > 0 THEN grouped_area END), 1) AS total_sr_area
 FROM
 
 
@@ -455,18 +516,19 @@ HAVING grouped_area > 0) AS t
 
 GROUP BY iteration, period, activity
 ----------
-3.7. disturbance area by iteration, period, method, activity, forest_status
+3.7. stand-replacing disturbance area by iteration, period, method, activity, forest_status
 SELECT iteration, period, activity,
-ROUND(SUM(CASE WHEN t.method_status = 'NGE' THEN t.grouped_area END), 1) AS NG_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'PBE' THEN t.grouped_area END), 1) AS PB_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'GSE' THEN t.grouped_area END), 1) AS GS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAE' THEN t.grouped_area END), 1) AS EA_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'MSE' THEN t.grouped_area END), 1) AS MS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E_area,
-ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_area,
-ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_area
+ROUND(SUM(CASE WHEN t.method_status = 'NGE' THEN t.grouped_area END), 1) AS NG_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'PBE' THEN t.grouped_area END), 1) AS PB_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'GSE' THEN t.grouped_area END), 1) AS GS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'EAE' THEN t.grouped_area END), 1) AS EA_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'MSE' THEN t.grouped_area END), 1) AS MS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'BSE' THEN t.grouped_area END), 1) AS BS_E_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'NGR' THEN t.grouped_area END), 1) AS NG_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'PBR' THEN t.grouped_area END), 1) AS PB_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'GSR' THEN t.grouped_area END), 1) AS GS_R_sr_area,
+ROUND(SUM(CASE WHEN t.method_status = 'EAR' THEN t.grouped_area END), 1) AS EA_R_sr_area,
+ROUND(SUM(CASE WHEN t.grouped_area > 0 THEN t.grouped_area END), 1) AS total_sr_area
 FROM
 
 

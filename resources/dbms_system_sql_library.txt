@@ -15,6 +15,13 @@ SELECT
 FROM existing_strata
 GROUP BY strata_id HAVING COUNT(*) > 1
 ----------
+1.2. List duplicated rows in the yield_tables
+SELECT prescription, row_id
+FROM yield_tables
+GROUP BY prescription, row_id
+HAVING COUNT(prescription || row_id) >1
+ORDER BY prescription, CAST(row_id AS DECMAL)
+----------
 ----------------------------------------------------EVEN AGE ROTATION------------------------------------------------
 
 ----------
