@@ -545,7 +545,7 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 			
 			
 			JButton btn_New_Multiple = new JButton();
-			btn_New_Multiple.setFont(new Font(null, Font.BOLD, 14));
+			btn_New_Multiple.setFont(new Font(null, Font.BOLD, 12));
 //			btn_New_Multiple.setText("NEW MULTIPLE");
 			btn_New_Multiple.setToolTipText("New multiple");
 			btn_New_Multiple.setIcon(IconHandle.get_scaledImageIcon(16, 16, "icon_add3.png"));				
@@ -557,7 +557,7 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 			
 			
 			JButton btn_Import_basic_Constraints = new JButton();
-			btn_Import_basic_Constraints.setFont(new Font(null, Font.BOLD, 14));
+			btn_Import_basic_Constraints.setFont(new Font(null, Font.BOLD, 12));
 //			btn_Import_basic_Constraints.setText("IMPORT");
 			btn_Import_basic_Constraints.setToolTipText("Import Basic Constraints");
 			btn_Import_basic_Constraints.setIcon(IconHandle.get_scaledImageIcon(16, 16, "icon_add4.png"));				
@@ -597,7 +597,7 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 			
 			
 			JButton btn_Delete = new JButton();
-			btn_Delete.setFont(new Font(null, Font.BOLD, 14));
+			btn_Delete.setFont(new Font(null, Font.BOLD, 12));
 //			btn_Delete.setText("DELETE");
 			btn_Delete.setToolTipText("Delete");
 			btn_Delete.setIcon(IconHandle.get_scaledImageIcon(16, 16, "icon_erase.png"));
@@ -628,11 +628,11 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 					return new Point(getWidth() - 10, 8);
 				}
 			};
-			btn_GetResult.setFont(new Font(null, Font.BOLD, 14));
+			btn_GetResult.setFont(new Font(null, Font.BOLD, 12));
 //			btn_GetResult.setText("Get Result");
 			btn_GetResult.setToolTipText("Calculate & Save");
-			btn_GetResult.setIcon(IconHandle.get_scaledImageIcon(25, 25, "icon_calculator.png"));
-			btn_GetResult.setRolloverIcon(IconHandle.get_scaledImageIcon(35, 35, "icon_calculator.png"));
+			btn_GetResult.setIcon(IconHandle.get_scaledImageIcon(18, 18, "icon_calculator.png"));
+			btn_GetResult.setRolloverIcon(IconHandle.get_scaledImageIcon(25, 25, "icon_calculator.png"));
 			btn_GetResult.setContentAreaFilled(false);
 			btn_GetResult.setEnabled(false);
 			c2.gridx = 0;
@@ -642,19 +642,34 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 			button_table_Panel.add(btn_GetResult, c2);
 			
 			
+			JButton btn_Clear = new JButton();
+			btn_Clear.setFont(new Font(null, Font.BOLD, 12));
+//			btn_Clear.setText("Clear values");
+			btn_Clear.setToolTipText("Clear values");
+			btn_Clear.setIcon(IconHandle.get_scaledImageIcon(18, 18, "icon_sweep.png"));	
+			btn_Clear.setRolloverIcon(IconHandle.get_scaledImageIcon(25, 25, "icon_sweep.png"));
+			btn_Clear.setContentAreaFilled(false);
+			btn_Clear.setEnabled(false);
+			c2.gridx = 0;
+			c2.gridy = 8;
+			c2.weightx = 0;
+			c2.weighty = 0;
+			button_table_Panel.add(btn_Clear, c2);
+			
+			
 			JButton btn_Save = new JButton() {
 				public Point getToolTipLocation(MouseEvent event) {
 					return new Point(getWidth() - 10, 5);
 				}
 			};
-			btn_Save.setFont(new Font(null, Font.BOLD, 14));
+			btn_Save.setFont(new Font(null, Font.BOLD, 12));
 //			btn_Save.setText("Save");
 			btn_Save.setToolTipText("Save");
-			btn_Save.setIcon(IconHandle.get_scaledImageIcon(20, 20, "icon_save.png"));
-			btn_Save.setRolloverIcon(IconHandle.get_scaledImageIcon(27, 27, "icon_save.png"));
+			btn_Save.setIcon(IconHandle.get_scaledImageIcon(18, 18, "icon_save.png"));
+			btn_Save.setRolloverIcon(IconHandle.get_scaledImageIcon(25, 25, "icon_save.png"));
 			btn_Save.setContentAreaFilled(false);
 			c2.gridx = 0;
-			c2.gridy = 8;
+			c2.gridy = 9;
 			c2.weightx = 0;
 			c2.weighty = 0;
 			button_table_Panel.add(btn_Save, c2);
@@ -663,7 +678,7 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 			c2.insets = new Insets(0, 0, 0, 0); // No padding
 			// Add Empty Label to make all buttons on top not middle
 			c2.gridx = 0;
-			c2.gridy = 9;
+			c2.gridy = 10;
 			c2.weightx = 0;
 			c2.weighty = 1;
 			button_table_Panel.add(new JLabel(), c2);
@@ -675,7 +690,7 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 			c2.gridy = 0;
 			c2.weightx = 1;
 			c2.weighty = 1;
-			c2.gridheight = 10;
+			c2.gridheight = 11;
 			button_table_Panel.add(table_ScrollPane, c2);
 			// End of 4th Grid -----------------------------------------------------------------------
 			// End of 4th Grid -----------------------------------------------------------------------	
@@ -704,9 +719,11 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 					if (selectedRow.length >= 1 && table9.isEnabled()) {		// Enable Delete & GetResult when: >=1 row is selected, table is enable (often after Edit button finished its task)
 						btn_Delete.setEnabled(true);
 						btn_GetResult.setEnabled(true);
+						btn_Clear.setEnabled(true);
 					} else {		// Disable Delete & GetResult
 						btn_Delete.setEnabled(false);
 						btn_GetResult.setEnabled(false);
+						btn_Clear.setEnabled(false);
 					}		
 					
 					if (selectedRow.length >= 1 && btn_Sort.getText().equals("OFF")) {	// Enable Spinner when: >=1 row is selected and Sorter is off
@@ -734,9 +751,11 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 					if (selectedRow.length >= 1 && table9.isEnabled()) {		// Enable Delete & GetResult when: >=1 row is selected, table is enable (often after Edit button finished its task)
 						btn_Delete.setEnabled(true);
 						btn_GetResult.setEnabled(true);
+						btn_Clear.setEnabled(true);
 					} else {		// Disable Delete & GetResult
 						btn_Delete.setEnabled(false);
 						btn_GetResult.setEnabled(false);
+						btn_Clear.setEnabled(false);
 					}	
 					
 					if (selectedRow.length >= 1 && btn_Sort.getText().equals("OFF")) {	// Enable Spinner when: >=1 row is selected and Sorter is off
@@ -1558,6 +1577,7 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 								btn_Delete.setVisible(false);
 								btn_Sort.setVisible(false);
 								btn_GetResult.setVisible(false);
+								btn_Clear.setVisible(false);
 								btn_Save.setVisible(false);
 								
 								if (table9.isEditing()) {
@@ -1628,6 +1648,7 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 								btn_Delete.setVisible(true);
 								btn_Sort.setVisible(true);
 								btn_GetResult.setVisible(true);
+								btn_Clear.setVisible(true);
 								btn_Save.setVisible(true);
 								
 								// To make UI refresh better
@@ -1644,6 +1665,38 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 					}
 				}
 			});		
+			
+			
+			// Clear
+			btn_Clear.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent actionEvent) {	
+					String ExitOption[] = {"Clear values", "Cancel"};
+					int response = JOptionPane.showOptionDialog(PrismMain.get_Prism_DesktopPane(), "Clear values from all iterations now?", "Confirm Clear",
+							JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, IconHandle.get_scaledImageIcon(50, 50, "icon_question.png"), ExitOption, ExitOption[0]);
+					if (response == 0) {
+						// cancel editing before clear
+						if (table9.isEditing()) {
+							table9.getCellEditor().cancelCellEditing();
+						}				
+						
+						// get selected rows
+						int[] selectedRow = table9.getSelectedRows();	
+						for (int i = 0; i < selectedRow.length; i++) {
+							selectedRow[i] = table9.convertRowIndexToModel(selectedRow[i]);	///Convert row index because "Sort" causes problems
+						}
+						
+						// clear all values
+						table9.clearSelection(); // To help trigger the row refresh: clear then add back the rows
+						for (int i: selectedRow) {
+							for (int iter_col = 12; iter_col < colCount9; iter_col++) {
+	    						data9[i][iter_col] = null;
+	    					}
+							table9.addRowSelectionInterval(table9.convertRowIndexToView(i), table9.convertRowIndexToView(i));
+						}	
+					}
+				}
+			});
 			
 						
 			// Save

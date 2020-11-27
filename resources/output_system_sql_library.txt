@@ -69,7 +69,7 @@ summarize_output_05_management_details.var_age NOT LIKE yield_tables.age_class
 
 ORDER BY iteration, prescription, row_id
 ----------
-1.5.a. every period area check 1
+1.5.1. every period area check 1
 SELECT
 CAST(iteration AS DECIMAL) AS iteration, CAST(var_period AS DECIMAL) AS period, 
 ROUND(SUM(var_value), 2) AS area
@@ -87,7 +87,7 @@ summarize_output_05_management_details.row_id = yield_tables.row_id
 GROUP BY iteration, period
 ORDER BY iteration, period
 ----------
-1.5.b. every period area check 2
+1.5.2. every period area check 2
 SELECT
 CAST(iteration AS DECIMAL) AS iteration, CAST(var_period AS DECIMAL) AS period, 
 ROUND(SUM(var_value), 2) AS area
