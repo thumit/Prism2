@@ -1907,7 +1907,7 @@ public class Output_Panel_Management_Details_NOSQL extends JLayeredPane implemen
 			for (int j = 1; j < identifierElements.length; j++) {		//Ignore the first element which is the identifier column index, so we loop from 1 not 0
 				thisIdentifier.add(identifierElements[j].replaceAll("\\s+",""));		//Add element name, if name has spaces then remove all the spaces
 			}
-			
+			Collections.sort(thisIdentifier);
 			dynamic_identifiers.add(thisIdentifier);
 		}
 			
