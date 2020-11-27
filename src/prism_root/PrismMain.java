@@ -118,7 +118,7 @@ public class PrismMain extends JFrame {
 			
 		 	
 			// Need border so cr can work
-			Border tempBorder = BorderFactory.createMatteBorder(3, 1, 1, 1, ColorUtil.makeTransparent(Color.BLACK, 255));
+			Border tempBorder = BorderFactory.createMatteBorder(3, 2, 3, 2, ColorUtil.makeTransparent(Color.BLACK, 255));
 //			TitledBorder title = BorderFactory.createTitledBorder(tempBorder, "PRISM Demo Version 1.10");
 			main.getRootPane().setBorder(tempBorder);
 			
