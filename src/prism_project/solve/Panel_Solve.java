@@ -84,7 +84,7 @@ public class Panel_Solve extends JLayeredPane implements ActionListener {
 		for (int row = 0; row < rowCount; row++) {
 			data[row][0] = runsList[row].getName();
 			data[row][1] = 0;
-			data[row][2] = "continue";
+			data[row][2] = "restart";
 			data[row][3] = "mean";
 			data[row][4] = "waiting";
 		}			
