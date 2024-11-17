@@ -157,7 +157,7 @@ public class Solve_Iterations {
 				// Read input files to retrieve values later
 				File input_01_file = new File(runFolder.getAbsolutePath() + "/input_01_general_inputs.txt");
 				File input_02_file = new File(runFolder.getAbsolutePath() + "/input_02_model_strata.txt");
-				File input_03_file = new File(runFolder.getAbsolutePath() + "/input_03_non_ea_management.txt");
+				File input_03_file = new File(runFolder.getAbsolutePath() + "/input_03_prescription_assignment.txt");	// previously nonea_management
 				File input_04_file = new File(runFolder.getAbsolutePath() + "/input_04_ea_management.txt");
 				File input_05_file = new File(runFolder.getAbsolutePath() + "/input_05_non_sr_disturbances.txt");
 				File input_06_file = new File(runFolder.getAbsolutePath() + "/input_06_sr_disturbances.txt");
@@ -302,16 +302,28 @@ public class Solve_Iterations {
 					
 					
 					int total_age_classes = total_periods - 1 + iter;		//loop from age 1 to total_age_classes (for regenerated strata, set total_age_classes = total_periods - 1 + iter for rolling horizon update
-					int total_NG_E_prescription_choices = 15;	// choices 0-14
-					int total_PB_E_prescription_choices = 15;	// choices 0-14
-					int total_GS_E_prescription_choices = 15;	// choices 0-14
-					int total_EA_E_prescription_choices = 6;	// choices 0-5
-					int total_MS_E_prescription_choices = 15;	// choices 0-14
-					int total_BS_E_prescription_choices = 15;	// choices 0-14
-					int total_NG_R_prescription_choices = 15;	// choices 0-14
-					int total_PB_R_prescription_choices = 15;	// choices 0-14
-					int total_GS_R_prescription_choices = 15;	// choices 0-14
-					int total_EA_R_prescription_choices = 6;	// choices 0-5
+					int total_prescription_choices = read_database.get_max_prescription_choices() + 1;	// total = max + 1 because choice starts from 0
+					int total_NG_E_prescription_choices = total_prescription_choices;
+					int total_PB_E_prescription_choices = total_prescription_choices;
+					int total_GS_E_prescription_choices = total_prescription_choices;
+					int total_EA_E_prescription_choices = total_prescription_choices;
+					int total_MS_E_prescription_choices = total_prescription_choices;
+					int total_BS_E_prescription_choices = total_prescription_choices;	
+					int total_NG_R_prescription_choices = total_prescription_choices;
+					int total_PB_R_prescription_choices = total_prescription_choices;
+					int total_GS_R_prescription_choices = total_prescription_choices;
+					int total_EA_R_prescription_choices = total_prescription_choices;
+					// the below is use to update the above after defining variables. This is not a perfect way but I simply don't have time. Perfectly, we should tailer the max for each index of the variable
+					int actual_max_NG_E_prescription_choices = 0;
+					int actual_max_PB_E_prescription_choices = 0;
+					int actual_max_GS_E_prescription_choices = 0;
+					int actual_max_EA_E_prescription_choices = 0;
+					int actual_max_MS_E_prescription_choices = 0;
+					int actual_max_BS_E_prescription_choices = 0;	
+					int actual_max_NG_R_prescription_choices = 0;
+					int actual_max_PB_R_prescription_choices = 0;
+					int actual_max_GS_R_prescription_choices = 0;
+					int actual_max_EA_R_prescription_choices = 0;
 					boolean allow_Non_Existing_Prescription = false;
 					
 	
@@ -452,6 +464,7 @@ public class Solve_Iterations {
 						for (int i = 0; i < total_NG_E_prescription_choices; i++) {
 							if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata.get(strata_id), "NG_E" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)				
 								
+								if (actual_max_NG_E_prescription_choices < i) actual_max_NG_E_prescription_choices = i;
 								xNGe[strata_id][i] = new int[total_periods + 1 + iter];
 								for (int t = 1 + iter; t <= total_periods + iter; t++) {
 									String var_name = "xNG_E_" + strata + "_" + i + "_" + t;	
@@ -490,6 +503,7 @@ public class Solve_Iterations {
 						for (int i = 0; i < total_PB_E_prescription_choices; i++) {
 							if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata.get(strata_id), "PB_E" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)	
 								
+								if (actual_max_PB_E_prescription_choices < i) actual_max_PB_E_prescription_choices = i;
 								xPBe[strata_id][i] = new int[total_periods + 1 + iter];
 								for (int t = 1 + iter; t <= total_periods + iter; t++) {
 									String var_name = "xPB_E_" + strata + "_" + i + "_" + t;										
@@ -528,6 +542,7 @@ public class Solve_Iterations {
 						for (int i = 0; i < total_GS_E_prescription_choices; i++) {
 							if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata.get(strata_id), "GS_E" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)		
 								
+								if (actual_max_GS_E_prescription_choices < i) actual_max_GS_E_prescription_choices = i;
 								xGSe[strata_id][i] = new int[total_periods + 1 + iter];
 								for (int t = 1 + iter; t <= total_periods + iter; t++) {
 									String var_name = "xGS_E_" + strata + "_" + i + "_" + t;										
@@ -572,8 +587,9 @@ public class Solve_Iterations {
 								if (is_ea_defined_with_some_rows && Collections.binarySearch(ea_conversion_and_rotation_for_strata.get(strata_id), this_covertype_conversion_and_rotation_age) >= 0) {
 									xEAe[strata_id][tR][s5R] = new int[total_EA_E_prescription_choices][];
 									for (int i = 0; i < total_EA_E_prescription_choices; i++) {
-	//									if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata.get(strata_id), "EA_E" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)	
+										if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata.get(strata_id), "EA_E" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)	
 											
+											if (actual_max_EA_E_prescription_choices < i) actual_max_EA_E_prescription_choices = i;
 											xEAe[strata_id][tR][s5R][i] = new int[total_periods + 1 + iter];
 											for (int t = 1 + iter; t <= tR; t++) {
 												String var_name = "xEA_E_" + strata + "_" + tR + "_" + layer5.get(s5R) + "_" + i + "_" + t;
@@ -599,7 +615,7 @@ public class Solve_Iterations {
 													nvars++;
 												}
 											}
-	//									}
+										}
 									}
 								}
 							}
@@ -614,8 +630,9 @@ public class Solve_Iterations {
 							
 							xMS[strata_id] = new int[total_MS_E_prescription_choices][];
 							for (int i = 0; i < total_MS_E_prescription_choices; i++) {
-	//							if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata.get(strata_id), "MS_E" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)	
+								if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata.get(strata_id), "MS_E" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)	
 									
+									if (actual_max_MS_E_prescription_choices < i) actual_max_MS_E_prescription_choices = i;
 									xMS[strata_id][i] = new int[total_periods + 1 + iter];
 									for (int t = 1 + iter; t <= total_periods + iter; t++) {
 										String var_name = "xMS_E_" + strata + "_" + i + "_" + t;										
@@ -641,7 +658,7 @@ public class Solve_Iterations {
 											nvars++;
 										}
 									}
-	//							}
+								}
 							}
 						}
 					}														
@@ -654,8 +671,9 @@ public class Solve_Iterations {
 							
 							xBS[strata_id] = new int[total_BS_E_prescription_choices][];
 							for (int i = 0; i < total_BS_E_prescription_choices; i++) {
-	//							if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata.get(strata_id), "BS_E" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)	
+								if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata.get(strata_id), "BS_E" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)	
 									
+									if (actual_max_BS_E_prescription_choices < i) actual_max_BS_E_prescription_choices = i;
 									xBS[strata_id][i] = new int[total_periods + 1 + iter];
 									for (int t = 1 + iter; t <= total_periods + iter; t++) {
 										String var_name = "xBS_E_" + strata + "_" + i + "_" + t;										
@@ -681,7 +699,7 @@ public class Solve_Iterations {
 											nvars++;
 										}									
 									}
-	//							}
+								}
 							}
 						}
 					}													
@@ -695,6 +713,7 @@ public class Solve_Iterations {
 						for (int i = 0; i < total_NG_R_prescription_choices; i++) {
 							if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata_without_sizeclass.get(strata_5layers_id), "NG_R" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)
 								
+								if (actual_max_NG_R_prescription_choices < i) actual_max_NG_R_prescription_choices = i;
 								xNGr[strata_5layers_id][i] = new int[total_periods + 1 + iter][];
 								int t_regen = (iter == 0) ? 2 : 1;	// this is because iteration 0 could not have regenerated forest in period 1, but iterations >= 1 do have regenerated forest strata
 								for (int t = t_regen + iter; t <= total_periods + iter; t++) {
@@ -737,6 +756,7 @@ public class Solve_Iterations {
 						for (int i = 0; i < total_PB_R_prescription_choices; i++) {
 							if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata_without_sizeclass.get(strata_5layers_id), "PB_R" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)
 								
+								if (actual_max_PB_R_prescription_choices < i) actual_max_PB_R_prescription_choices = i;
 								xPBr[strata_5layers_id][i] = new int[total_periods + 1 + iter][];
 								int t_regen = (iter == 0) ? 2 : 1;	// this is because iteration 0 could not have regenerated forest in period 1, but iterations >= 1 do have regenerated forest strata
 								for (int t = t_regen + iter; t <= total_periods + iter; t++) {
@@ -779,6 +799,7 @@ public class Solve_Iterations {
 						for (int i = 0; i < total_GS_R_prescription_choices; i++) {
 							if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata_without_sizeclass.get(strata_5layers_id), "GS_R" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)
 								
+								if (actual_max_GS_R_prescription_choices < i) actual_max_GS_R_prescription_choices = i;
 								xGSr[strata_5layers_id][i] = new int[total_periods + 1 + iter][];
 								int t_regen = (iter == 0) ? 2 : 1;	// this is because iteration 0 could not have regenerated forest in period 1, but iterations >= 1 do have regenerated forest strata
 								for (int t = t_regen + iter; t <= total_periods + iter; t++) {
@@ -829,8 +850,9 @@ public class Solve_Iterations {
 									if (is_ea_defined_with_some_rows && Collections.binarySearch(ea_conversion_and_rotation_for_strata_without_sizeclass.get(strata_5layers_id), this_covertype_conversion_and_rotation_age) >= 0) {
 										xEAr[strata_5layers_id][tR][aR][s5R] = new int[total_EA_R_prescription_choices][];
 										for (int i = 0; i < total_EA_R_prescription_choices; i++) {
-	//										if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata_without_sizeclass.get(strata_5layers_id), "EA_R" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)
+											if (is_nonea_defined_with_some_rows && Collections.binarySearch(nonea_method_choice_for_strata_without_sizeclass.get(strata_5layers_id), "EA_R" + " " + i) >= 0) {	// Boost 1 (a.k.a. Silviculture Method)
 												
+												if (actual_max_EA_R_prescription_choices < i) actual_max_EA_R_prescription_choices = i;
 												xEAr[strata_5layers_id][tR][aR][s5R][i] = new int[total_periods + 1 + iter];
 												for (int t = tR - aR + 1; t <= tR; t++) {
 													if (t >= t_regen + iter) {
@@ -858,13 +880,26 @@ public class Solve_Iterations {
 														}
 													}
 												}
-	//										}
+											}
 										}
 									}
 								}
 							}
 						}
 					}
+					
+					// Update the actual choice cap. Again, this is not a perfect way to do this. Not optimal but at least works and save significant memory.
+					total_NG_E_prescription_choices = actual_max_NG_E_prescription_choices + 1;	// total = max + 1 because choice starts from 0
+					total_PB_E_prescription_choices = actual_max_PB_E_prescription_choices + 1;
+					total_GS_E_prescription_choices = actual_max_GS_E_prescription_choices + 1;
+					total_EA_E_prescription_choices = actual_max_EA_E_prescription_choices + 1;
+					total_MS_E_prescription_choices = actual_max_MS_E_prescription_choices + 1;
+					total_BS_E_prescription_choices = actual_max_BS_E_prescription_choices + 1;	
+					total_NG_R_prescription_choices = actual_max_NG_R_prescription_choices + 1;
+					total_PB_R_prescription_choices = actual_max_PB_R_prescription_choices + 1;
+					total_GS_R_prescription_choices = actual_max_GS_R_prescription_choices + 1;
+					total_EA_R_prescription_choices = actual_max_EA_R_prescription_choices + 1;
+					
 					
 					
 					//-----------------------replacing disturbance variables

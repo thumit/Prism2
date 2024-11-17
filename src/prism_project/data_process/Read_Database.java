@@ -63,6 +63,7 @@ public class Read_Database {
 	private File file_database;
 	
 	private LinkedList_Layers layers;
+	private int max_prescription_choices; 
 	
 	public Read_Database(File file_database) {
 		this.file_database = file_database;
@@ -124,6 +125,9 @@ public class Read_Database {
 		return file_database;
 	}
 	
+	public int get_max_prescription_choices() {	
+		return max_prescription_choices;
+	}
 	
 	private void Read_yield_tables() {		
 		try {			
@@ -132,6 +136,12 @@ public class Read_Database {
 
 			
 			//-----------------------------------------------------------------------------------------------------------
+			// get the maximum prescription choice across all prescriptions
+			rs = st.executeQuery("SELECT MAX(CAST(SUBSTR(prescription, LENGTH(prescription) - INSTR(REVERSE(prescription), '_') + 2) AS INTEGER)) AS max_value FROM yield_tables;");
+			while (rs.next()) {
+				max_prescription_choices = rs.getInt(1);
+			}									
+			
 			// get total yield tables
 			int total_prescriptions = 0;				
 			rs = st.executeQuery("SELECT COUNT(DISTINCT prescription) FROM yield_tables;");		//This only have 1 row and 1 column, the value is total number of unique prescription
@@ -668,7 +678,7 @@ public class Read_Database {
 		List<String> method = Arrays.asList(new String[] { "NG_E", "PB_E", "GS_E", "EA_E", "MS_E", "BS_E", "NG_R", "PB_R", "GS_R", "EA_R" });	// method
 		List<String> choice = new ArrayList<String>() {		// period
 			{
-				for (int i = 0; i <= 14; i++) {add(Integer.toString(i));}
+				for (int i = 0; i <= max_prescription_choices; i++) {add(Integer.toString(i));}
 			}
 		};	
 			
@@ -692,7 +702,7 @@ public class Read_Database {
 		List<String> method = Arrays.asList(new String[] { "NG_E", "PB_E", "GS_E", "EA_E", "MS_E", "BS_E", "NG_R", "PB_R", "GS_R", "EA_R" });	// method
 		List<String> choice = new ArrayList<String>() {		// choice
 			{
-				for (int i = 0; i <= 14; i++) {add(Integer.toString(i));}
+				for (int i = 0; i <= max_prescription_choices; i++) {add(Integer.toString(i));}
 			}
 		};
 		List<String> rotation_period = new ArrayList<String>() {	// rotation_period

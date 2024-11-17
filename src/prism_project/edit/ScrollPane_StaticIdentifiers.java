@@ -76,16 +76,16 @@ public class ScrollPane_StaticIdentifiers extends JScrollPane {
 			// Full name of silviculture methods
 			List<List<String>> allmethods_ToolTips = read_Database.get_method_period_layers();
 			for (int i = 0; i < allmethods_ToolTips.get(0).size(); i++) {	// 0 is method, 1 is period
-				if (allmethods_ToolTips.get(0).get(i).equals("NG_E")) 	allmethods_ToolTips.get(0).set(i, "Natural Growth existing: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("PB_E")) 	allmethods_ToolTips.get(0).set(i, "Prescribed Burn existing: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("GS_E")) 	allmethods_ToolTips.get(0).set(i, "Group Selection existing: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("EA_E")) 	allmethods_ToolTips.get(0).set(i, "Even Age existing: choices 0-5");
-				if (allmethods_ToolTips.get(0).get(i).equals("MS_E")) 	allmethods_ToolTips.get(0).set(i, "Mixed Severity Wildfire: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("BS_E")) 	allmethods_ToolTips.get(0).set(i, "Severe Bark Beetle: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("NG_R")) 	allmethods_ToolTips.get(0).set(i, "Natural Growth regeneration: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("PB_R")) 	allmethods_ToolTips.get(0).set(i, "Prescribed Burn regeneration: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("GS_R")) 	allmethods_ToolTips.get(0).set(i, "Group Selection regeneration: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("EA_R")) 	allmethods_ToolTips.get(0).set(i, "Even Age regeneration: choices 0-5");		
+				if (allmethods_ToolTips.get(0).get(i).equals("NG_E")) 	allmethods_ToolTips.get(0).set(i, "Natural Growth existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("PB_E")) 	allmethods_ToolTips.get(0).set(i, "Prescribed Burn existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("GS_E")) 	allmethods_ToolTips.get(0).set(i, "Group Selection existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("EA_E")) 	allmethods_ToolTips.get(0).set(i, "Even Age existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("MS_E")) 	allmethods_ToolTips.get(0).set(i, "Mixed Severity Wildfire existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("BS_E")) 	allmethods_ToolTips.get(0).set(i, "Severe Bark Beetle existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("NG_R")) 	allmethods_ToolTips.get(0).set(i, "Natural Growth regeneration prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("PB_R")) 	allmethods_ToolTips.get(0).set(i, "Prescribed Burn regeneration prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("GS_R")) 	allmethods_ToolTips.get(0).set(i, "Group Selection regeneration prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("EA_R")) 	allmethods_ToolTips.get(0).set(i, "Even Age regeneration prescriptions");		
 			}	
 			allLayers_ToolTips.addAll(allmethods_ToolTips);
 		}
@@ -109,16 +109,16 @@ public class ScrollPane_StaticIdentifiers extends JScrollPane {
 			// Full name of silviculture methods
 			List<List<String>> allmethods_ToolTips = read_Database.get_method_choice_layers();
 			for (int i = 0; i < allmethods_ToolTips.get(0).size(); i++) {	// 0 is method, 1 is choice
-				if (allmethods_ToolTips.get(0).get(i).equals("NG_E")) 	allmethods_ToolTips.get(0).set(i, "Natural Growth existing: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("PB_E")) 	allmethods_ToolTips.get(0).set(i, "Prescribed Burn existing: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("GS_E")) 	allmethods_ToolTips.get(0).set(i, "Group Selection existing: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("EA_E")) 	allmethods_ToolTips.get(0).set(i, "Even Age existing: choices 0-5");
-				if (allmethods_ToolTips.get(0).get(i).equals("MS_E")) 	allmethods_ToolTips.get(0).set(i, "Mixed Severity Wildfire: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("BS_E")) 	allmethods_ToolTips.get(0).set(i, "Severe Bark Beetle: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("NG_R")) 	allmethods_ToolTips.get(0).set(i, "Natural Growth regeneration: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("PB_R")) 	allmethods_ToolTips.get(0).set(i, "Prescribed Burn regeneration: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("GS_R")) 	allmethods_ToolTips.get(0).set(i, "Group Selection regeneration: choices 0-14");
-				if (allmethods_ToolTips.get(0).get(i).equals("EA_R")) 	allmethods_ToolTips.get(0).set(i, "Even Age regeneration: choices 0-5");		
+				if (allmethods_ToolTips.get(0).get(i).equals("NG_E")) 	allmethods_ToolTips.get(0).set(i, "Natural Growth existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("PB_E")) 	allmethods_ToolTips.get(0).set(i, "Prescribed Burn existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("GS_E")) 	allmethods_ToolTips.get(0).set(i, "Group Selection existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("EA_E")) 	allmethods_ToolTips.get(0).set(i, "Even Age existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("MS_E")) 	allmethods_ToolTips.get(0).set(i, "Mixed Severity Wildfire existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("BS_E")) 	allmethods_ToolTips.get(0).set(i, "Severe Bark Beetle existing prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("NG_R")) 	allmethods_ToolTips.get(0).set(i, "Natural Growth regeneration prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("PB_R")) 	allmethods_ToolTips.get(0).set(i, "Prescribed Burn regeneration prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("GS_R")) 	allmethods_ToolTips.get(0).set(i, "Group Selection regeneration prescriptions");
+				if (allmethods_ToolTips.get(0).get(i).equals("EA_R")) 	allmethods_ToolTips.get(0).set(i, "Even Age regeneration prescriptions");		
 			}	
 			allLayers_ToolTips.addAll(allmethods_ToolTips);			
 		}
@@ -255,14 +255,14 @@ public class ScrollPane_StaticIdentifiers extends JScrollPane {
 					}
 				});
 						
-				// Disable method EA_E and EA_R in Non-EA Management window
-				if (i == 0 && option == 3) {	 // i=0 --> method (this option only has choice and method in the GUI)
-					for (JCheckBox cb : checkboxStaticIdentifiers.get(i)) {
-						if (cb.getText().equals("EA_E") || cb.getText().equals("EA_R") || cb.getText().equals("MS_E") || cb.getText().equals("BS_E")) {
-							cb.setEnabled(false);
-						}
-					}
-				}
+//				// Disable method EA_E and EA_R in Non-EA Management window
+//				if (i == 0 && option == 3) {	 // i=0 --> method (this option only has choice and method in the GUI)
+//					for (JCheckBox cb : checkboxStaticIdentifiers.get(i)) {
+//						if (cb.getText().equals("EA_E") || cb.getText().equals("EA_R") || cb.getText().equals("MS_E") || cb.getText().equals("BS_E")) {
+//							cb.setEnabled(false);
+//						}
+//					}
+//				}
 			}
 		}
 		

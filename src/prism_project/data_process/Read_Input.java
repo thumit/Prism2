@@ -198,7 +198,7 @@ public class Read_Input {
 	}
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------------------	
-	//For input_03_non_ea_management : must be read after model_strata
+	//For input_03_prescription_assignment : must be read after model_strata
 	private int nonea_total_rows, nonea_total_columns;
 	private String[][] nonea_data;
 	private List<List<String>> nonea_method_choice_for_strata;

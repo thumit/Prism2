@@ -35,7 +35,7 @@ public class ScrollPane_SubTable_EA_Management extends JScrollPane {
 		this.data4a = data4a;
 		this.model4a = model4a;
 	
-		TitledBorder border = new TitledBorder("Covertype Conversion & Rotation Age (choices limit = 0-5)");
+		TitledBorder border = new TitledBorder("Covertype Conversion & Rotation Age");
 		border.setTitleJustification(TitledBorder.CENTER);
 		setBorder(border);
 		setViewportView(null);

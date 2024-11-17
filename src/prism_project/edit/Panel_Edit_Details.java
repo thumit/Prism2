@@ -167,7 +167,7 @@ public class Panel_Edit_Details extends JLayeredPane implements ActionListener {
 	private PrismTableModel model3;
 	private Object[][] data3;
 	
-	// table input_03_non_ea_management.txt
+	// table input_03_prescription_assignment.txt
 	private boolean is_table2_loaded = false;
 	private int rowCount2, colCount2;
 	private String[] columnNames2;
@@ -310,7 +310,7 @@ public class Panel_Edit_Details extends JLayeredPane implements ActionListener {
 		radio_button  = new JRadioButton[10];
 		radio_button[0]= new JRadioButton("General Inputs");
 		radio_button[1]= new JRadioButton("Model Strata");
-		radio_button[2]= new JRadioButton("Non-EA Management");
+		radio_button[2]= new JRadioButton("Prescription Assignment");
 		radio_button[3]= new JRadioButton("EA Management");
 		radio_button[4]= new JRadioButton("Non-SR Disturbances");
 		radio_button[5]= new JRadioButton("SR Disturbances");
@@ -438,7 +438,7 @@ public class Panel_Edit_Details extends JLayeredPane implements ActionListener {
 		}
 
 
-		table_file = new File(currentRunFolder.getAbsolutePath() + "/input_03_non_ea_management.txt");
+		table_file = new File(currentRunFolder.getAbsolutePath() + "/input_03_prescription_assignment.txt");
 		if (table_file.exists()) {        //Load from input
 			tableLoader = new Reload_Table_Info(table_file);
 			rowCount2 = tableLoader.get_rowCount();
@@ -636,7 +636,7 @@ public class Panel_Edit_Details extends JLayeredPane implements ActionListener {
 				// -----------------------------------------------------------------------------
 				// -------------------Begin of where we could delete----------------------------
 				// -----------------------------------------------------------------------------
-				List<String> list_of_modified_tables = Arrays.asList("input_03_non_ea_management.txt", "input_04_ea_management.txt", "input_05_non_sr_disturbances.txt", "input_06_sr_disturbances.txt", "input_07_management_cost.txt");
+				List<String> list_of_modified_tables = Arrays.asList("input_03_prescription_assignment.txt", "input_04_ea_management.txt", "input_05_non_sr_disturbances.txt", "input_06_sr_disturbances.txt", "input_07_management_cost.txt");
 				if (list_of_modified_tables.contains(table_file.getName())) {
 					if (!input_columnNames[input_columnNames.length - 1].equals("model_condition")) {
 						// Modify old input
@@ -5049,7 +5049,7 @@ public class Panel_Edit_Details extends JLayeredPane implements ActionListener {
 			
 			// 2nd grid -----------------------------------------------------------------------
 			// 2nd grid -----------------------------------------------------------------------	
-			panel_name = "Method & Choice to be implemented (choices limit = 0-14)";
+			panel_name = "Prescription Method & Choice to implement (select only necessary options for optimal solution time)";
 			static_identifiers_scrollpane_silviculture = new ScrollPane_StaticIdentifiers(read_database, 3, panel_name);
 			checkboxStaticIdentifiers_silviculture = static_identifiers_scrollpane_silviculture.get_CheckboxStaticIdentifiers();	
 			
@@ -5068,7 +5068,7 @@ public class Panel_Edit_Details extends JLayeredPane implements ActionListener {
 			// 4th Grid -----------------------------------------------------------------------------
 			// Add all buttons to a Panel----------------------------------
 			button_table_Panel = new JPanel(new GridBagLayout());
-			TitledBorder border = new TitledBorder("Aggregation Conditions (no row = disable all unenven-aged methods)");
+			TitledBorder border = new TitledBorder("Aggregation Conditions (no row = disable all prescriptions)");
 			border.setTitleJustification(TitledBorder.CENTER);
 			button_table_Panel.setBorder(border);
 			GridBagConstraints c2 = new GridBagConstraints();
@@ -5591,7 +5591,7 @@ public class Panel_Edit_Details extends JLayeredPane implements ActionListener {
 			// 4th Grid -----------------------------------------------------------------------------
 			// Add all buttons to a Panel----------------------------------
 			button_table_Panel = new JPanel(new GridBagLayout());
-			TitledBorder border = new TitledBorder("Agregation Conditions (no row = disable all even-aged methods)");
+			TitledBorder border = new TitledBorder("Agregation Conditions (no row = disable all even-aged prescriptions)");
 			border.setTitleJustification(TitledBorder.CENTER);
 			button_table_Panel.setBorder(border);
 			GridBagConstraints c2 = new GridBagConstraints();
@@ -6092,7 +6092,7 @@ public class Panel_Edit_Details extends JLayeredPane implements ActionListener {
 			// 2nd grid -----------------------------------------------------------------------	
 			String message = 
 					  "1. Percentage is the proportion of an existing stratum area assigned to a Non-SR disturbance from the 1st period\n\n"
-					+ "2. MS_E and BS_E have prescription-choices limit = 0-14. Percentage is auto zero if not found any prescription\n\n"
+					+ "2. Percentage for each type of disturbance is auto zero if not found any prescription in the database\n\n"
 					+ "3. If percentage = null (blank cell), percentage value will be based on the next lower priority condition\n\n"
 					+ "4. If percentage = null after processing all conditions, Prism would be free to assign any percentage value.\nWe often use the \"all null\" set up to control Non-SR disturbances through using basic constraints\n\n"
 					+ "5. MS_R and BS_R are absent. We might want to define zero loss for SR disturbances in MS_E and BS_E areas.\n\n"
@@ -10378,7 +10378,7 @@ public class Panel_Edit_Details extends JLayeredPane implements ActionListener {
 	public void save_inputs_for_this_run() {
 		File input_01_file = new File(currentRunFolder.getAbsolutePath() + "/input_01_general_inputs.txt");
 		File input_02_file = new File(currentRunFolder.getAbsolutePath() + "/input_02_model_strata.txt");
-		File input_03_file = new File(currentRunFolder.getAbsolutePath() + "/input_03_non_ea_management.txt");
+		File input_03_file = new File(currentRunFolder.getAbsolutePath() + "/input_03_prescription_assignment.txt");
 		File input_04_file = new File(currentRunFolder.getAbsolutePath() + "/input_04_ea_management.txt");
 		File input_05_file = new File(currentRunFolder.getAbsolutePath() + "/input_05_non_sr_disturbances.txt");
 		File input_06_file = new File(currentRunFolder.getAbsolutePath() + "/input_06_sr_disturbances.txt");
