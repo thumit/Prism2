@@ -94,7 +94,7 @@ public class Prism2Main extends JFrame {
 	private MenuItem_SetTransparency 	setTransparency;		// For menuWindow
 	private MenuItem_CaptureGUI 		captureGUI;				// For menuWindow
 		
-	private static String 				prism_version = "PRISM ALPHA 2.0.08";
+	private static String 				prism_version = "PRISM ALPHA 2.0.09";
 	private String 						currentProject;
 	private static PrismDesktopPane 	prism_DesktopPane;
 	private static PrismContentPane 	prism_ContentPane;
