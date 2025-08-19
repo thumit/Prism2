@@ -219,8 +219,9 @@ class ScrollPane_Popup extends JScrollPane {
 		
 		
 		
-		JLabel label = new JLabel(IconHandle.get_scaledImageIcon(230, 70, "prism_ice.png"));
-		JLabel label2 = new JLabel("Change maximum memory (GigaBytes) PRISM is allowed to use");
+		JLabel label1 = new JLabel(IconHandle.get_scaledImageIcon(230, 70, "prism_ice.png"));
+		JLabel label2 = new JLabel(Prism2Main.get_prism_version().toLowerCase().replace("prism", ""));
+		JLabel label3 = new JLabel("Change maximum memory (GigaBytes) PRISM is allowed to use");
 		int total_memory = Integer.valueOf(formatSize(totalSize).substring(0, formatSize(totalSize).lastIndexOf('.')));
 		int max_combo_value = total_memory - (int) (total_memory * 0.1);
 		JComboBox combo = new JComboBox();
@@ -253,24 +254,28 @@ class ScrollPane_Popup extends JScrollPane {
 		popupPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
-		popupPanel.add(label, PrismGridBagLayoutHandle.get_c(c, "Center", 
+		popupPanel.add(label1, PrismGridBagLayoutHandle.get_c(c, "Center", 
 				0, 0, 3, 1, 1, 0, 	// gridx, gridy, gridwidth, gridheight, weightx, weighty
 				0, 0, 0, 0));	// insets top, left, bottom, right	
 		
-		popupPanel.add(label2, PrismGridBagLayoutHandle.get_c(c, "NONE", 
-				0, 1, 1, 1, 1, 0, 	// gridx, gridy, gridwidth, gridheight, weightx, weighty
+		popupPanel.add(label2, PrismGridBagLayoutHandle.get_c(c, "Center", 
+				0, 1, 3, 1, 1, 0, 	// gridx, gridy, gridwidth, gridheight, weightx, weighty
+				0, 0, 0, 0));	// insets top, left, bottom, right	
+		
+		popupPanel.add(label3, PrismGridBagLayoutHandle.get_c(c, "NONE", 
+				0, 2, 1, 1, 1, 0, 	// gridx, gridy, gridwidth, gridheight, weightx, weighty
 				10, 0, 0, 0));	// insets top, left, bottom, right	
 		
 		popupPanel.add(combo, PrismGridBagLayoutHandle.get_c(c, "HORIZONTAL", 
-				1, 1, 1, 1, 0.5, 0, 	// gridx, gridy, gridwidth, gridheight, weightx, weighty
+				1, 2, 1, 1, 0.5, 0, 	// gridx, gridy, gridwidth, gridheight, weightx, weighty
 				10, 0, 0, 0));	// insets top, left, bottom, right	
 		
 		popupPanel.add(new JLabel(), PrismGridBagLayoutHandle.get_c(c, "HORIZONTAL", 
-				2, 1, 1, 1, 0.5, 0, 	// gridx, gridy, gridwidth, gridheight, weightx, weighty
+				2, 2, 1, 1, 0.5, 0, 	// gridx, gridy, gridwidth, gridheight, weightx, weighty
 				10, 0, 0, 0));	// insets top, left, bottom, right	
 		
 		popupPanel.add(readme_scrollpane, PrismGridBagLayoutHandle.get_c(c, "BOTH", 
-				0, 2, 3, 1, 0, 1, 	// gridx, gridy, gridwidth, gridheight, weightx, weighty
+				0, 3, 3, 1, 0, 1, 	// gridx, gridy, gridwidth, gridheight, weightx, weighty
 				10, 0, 0, 0));	// insets top, left, bottom, right
 		
 		
