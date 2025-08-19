@@ -30,7 +30,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import prism_convenience.StringHandle;
-import prism_root.PrismMain;
+import prism_root.Prism2Main;
 
 public class SQLite {
 	
@@ -176,7 +176,7 @@ private static int lines_count;
 			conn.commit(); // commit all prepared execution, this is important
 			conn.close();
 		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(PrismMain.get_Prism_DesktopPane(), e, e.getMessage(), PrismMain.get_Prism_DesktopPane().getWidth(), null);
+			JOptionPane.showMessageDialog(Prism2Main.get_Prism_DesktopPane(), e, e.getMessage(), Prism2Main.get_Prism_DesktopPane().getWidth(), null);
 		}
 	}
 }

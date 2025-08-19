@@ -41,7 +41,7 @@ import javax.swing.table.TableColumn;
 
 import prism_convenience.PrismTableModel;
 import prism_convenience.TableColumnsHandle;
-import prism_root.PrismMain;
+import prism_root.Prism2Main;
 
 public class ScrollPane_ConstraintsSplitNonSR extends JScrollPane {
 
@@ -106,7 +106,7 @@ public class ScrollPane_ConstraintsSplitNonSR extends JScrollPane {
 			@Override
 			public void setValueAt(Object value, int row, int col) {
 				if (value != null && col > 2 && (((Number) value).doubleValue() < 0 || ((Number) value).doubleValue() > 100)) {	// allow null to be set
-    				JOptionPane.showMessageDialog(PrismMain.get_Prism_DesktopPane(), "Your input has not been accepted. Only double values in the range 0-100 (%) would be allowed.");
+    				JOptionPane.showMessageDialog(Prism2Main.get_Prism_DesktopPane(), "Your input has not been accepted. Only double values in the range 0-100 (%) would be allowed.");
     			} else {
     				data[row][col] = value;
     			}

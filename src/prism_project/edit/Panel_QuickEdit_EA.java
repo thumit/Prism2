@@ -42,7 +42,7 @@ import javax.swing.table.TableRowSorter;
 
 import prism_convenience.IconHandle;
 import prism_convenience.PrismTableModel;
-import prism_root.PrismMain;
+import prism_root.Prism2Main;
 
 public class Panel_QuickEdit_EA extends JPanel {
 	private JTable table;
@@ -164,7 +164,7 @@ public class Panel_QuickEdit_EA extends JPanel {
 		btn_default.setContentAreaFilled(false);
 		btn_default.addActionListener(e -> {
 			String ExitOption[] = {"Reset","Cancel"};
-			int response = JOptionPane.showOptionDialog(PrismMain.get_Prism_DesktopPane(),"Reset now?", "Reset all cells to default",
+			int response = JOptionPane.showOptionDialog(Prism2Main.get_Prism_DesktopPane(),"Reset now?", "Reset all cells to default",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, IconHandle.get_scaledImageIcon(50, 50, "icon_question.png"), ExitOption, ExitOption[0]);
 			if (response == 0) {	
 				String previous_view = view_label.getText();

@@ -33,7 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import prism_project.edit.Panel_Edit_Details;
-import prism_root.PrismMain;
+import prism_root.Prism2Main;
 
 public class FilesHandle {
 	
@@ -84,7 +84,7 @@ public class FilesHandle {
 		File file_animation = new File(FilesHandle.get_temporaryFolder().getAbsolutePath() + "/" + "animation.jar");
 		file_animation.deleteOnExit();
 		try {
-			InputStream initialStream = PrismMain.get_main().getClass().getResourceAsStream("/test.jar");
+			InputStream initialStream = Prism2Main.get_main().getClass().getResourceAsStream("/test.jar");
 			byte[] buffer = new byte[initialStream.available()];
 			initialStream.read(buffer);
 
@@ -107,7 +107,7 @@ public class FilesHandle {
 		String workingLocation;
 
 		// Get working location of the IDE project, or runnable jar file
-		final File jarFile = new File(PrismMain.get_main().getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+		final File jarFile = new File(Prism2Main.get_main().getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
 		workingLocation = jarFile.getParentFile().toString();
 
 		// Make the working location with correct name
@@ -186,10 +186,10 @@ public class FilesHandle {
 	public static File chosenDefinition() {
 		File file = null;
 			
-		ImageIcon icon = new ImageIcon(PrismMain.get_main().getClass().getResource("/icon_question.png"));
+		ImageIcon icon = new ImageIcon(Prism2Main.get_main().getClass().getResource("/icon_question.png"));
 		Image scaleImage = icon.getImage().getScaledInstance(50, 50,Image.SCALE_SMOOTH);
 		String ExitOption[] = {"New definition","Default definition","Cancel"};
-		int response = JOptionPane.showOptionDialog(PrismMain.get_Prism_DesktopPane(),"Except General Inputs, everything will be reset. Your option ?", "Import Strata Definition",
+		int response = JOptionPane.showOptionDialog(Prism2Main.get_Prism_DesktopPane(),"Except General Inputs, everything will be reset. Your option ?", "Import Strata Definition",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, new ImageIcon(scaleImage), ExitOption, ExitOption[2]);
 		if (response == 0)
 		{
@@ -205,7 +205,7 @@ public class FilesHandle {
 			chooser.setFileFilter(filter);
 			chooser.setAcceptAllFileFilterUsed(false);
 			
-			int returnValue = chooser.showOpenDialog(PrismMain.get_main());
+			int returnValue = chooser.showOpenDialog(Prism2Main.get_main());
 			if (returnValue == JFileChooser.APPROVE_OPTION) {	//Return the new Definition as in the selected file
 				file = chooser.getSelectedFile();
 			}
@@ -251,7 +251,7 @@ public class FilesHandle {
 		chooser.setFileFilter(filter);
 		chooser.setAcceptAllFileFilterUsed(false);
 		
-		int returnValue = chooser.showOpenDialog(PrismMain.get_main());
+		int returnValue = chooser.showOpenDialog(Prism2Main.get_main());
 		File file = null;
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			file = chooser.getSelectedFile();
@@ -268,7 +268,7 @@ public class FilesHandle {
 			file_dbms_system_sql_library = new File(get_temporaryFolder().getAbsolutePath() + "/" + "dbms_system_sql_library.txt");
 			file_dbms_system_sql_library.deleteOnExit();
 
-			InputStream initialStream = PrismMain.get_main().getClass().getResourceAsStream("/dbms_system_sql_library.txt");
+			InputStream initialStream = Prism2Main.get_main().getClass().getResourceAsStream("/dbms_system_sql_library.txt");
 			byte[] buffer = new byte[initialStream.available()];
 			initialStream.read(buffer);
 
@@ -299,7 +299,7 @@ public class FilesHandle {
 			file_output_system_sql_library = new File(get_temporaryFolder().getAbsolutePath() + "/" + "output_system_sql_library.txt");
 			file_output_system_sql_library.deleteOnExit();
 
-			InputStream initialStream = PrismMain.get_main().getClass().getResourceAsStream("/output_system_sql_library.txt");
+			InputStream initialStream = Prism2Main.get_main().getClass().getResourceAsStream("/output_system_sql_library.txt");
 			byte[] buffer = new byte[initialStream.available()];
 			initialStream.read(buffer);
 
@@ -330,7 +330,7 @@ public class FilesHandle {
 			file_maequee = new File(get_temporaryFolder().getAbsolutePath() + "/" + "maequee.txt");
 			file_maequee.deleteOnExit();
 
-			InputStream initialStream = PrismMain.get_main().getClass().getResourceAsStream("/maequee.txt");
+			InputStream initialStream = Prism2Main.get_main().getClass().getResourceAsStream("/maequee.txt");
 			byte[] buffer = new byte[initialStream.available()];
 			initialStream.read(buffer);
 
@@ -355,7 +355,7 @@ public class FilesHandle {
 			file_yield_dictionary = new File(get_temporaryFolder().getAbsolutePath() + "/" + "yield_dictionary.csv");
 			file_yield_dictionary.deleteOnExit();
 
-			InputStream initialStream = PrismMain.get_main().getClass().getResourceAsStream("/yield_dictionary.csv");
+			InputStream initialStream = Prism2Main.get_main().getClass().getResourceAsStream("/yield_dictionary.csv");
 			byte[] buffer = new byte[initialStream.available()];
 			initialStream.read(buffer);
 
@@ -380,7 +380,7 @@ public class FilesHandle {
 			file_input_05 = new File(get_temporaryFolder().getAbsolutePath() + "/" + "input_05_non_sr_disturbances.txt");
 			file_input_05.deleteOnExit();
 
-			InputStream initialStream = PrismMain.get_main().getClass().getResourceAsStream("/input_05_non_sr_disturbances.txt");
+			InputStream initialStream = Prism2Main.get_main().getClass().getResourceAsStream("/input_05_non_sr_disturbances.txt");
 			byte[] buffer = new byte[initialStream.available()];
 			initialStream.read(buffer);
 
@@ -404,7 +404,7 @@ public class FilesHandle {
 			file_input_05 = new File(get_temporaryFolder().getAbsolutePath() + "/" + "input_05_non_sr_disturbances_alt.txt");
 			file_input_05.deleteOnExit();
 
-			InputStream initialStream = PrismMain.get_main().getClass().getResourceAsStream("/input_05_non_sr_disturbances_alt.txt");
+			InputStream initialStream = Prism2Main.get_main().getClass().getResourceAsStream("/input_05_non_sr_disturbances_alt.txt");
 			byte[] buffer = new byte[initialStream.available()];
 			initialStream.read(buffer);
 

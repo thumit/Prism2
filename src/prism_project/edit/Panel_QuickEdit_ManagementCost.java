@@ -54,7 +54,7 @@ import prism_convenience.PrismGridBagLayoutHandle;
 import prism_convenience.PrismTableModel;
 import prism_convenience.TableColumnsHandle;
 import prism_project.data_process.Read_Database;
-import prism_root.PrismMain;
+import prism_root.Prism2Main;
 
 public class Panel_QuickEdit_ManagementCost extends JPanel {
 	private JTable table7b;
@@ -510,7 +510,7 @@ public class Panel_QuickEdit_ManagementCost extends JPanel {
 				public void actionPerformed(ActionEvent actionEvent) {
 					radioButton[1].doClick();
 					String ExitOption[] = { "Ok" };
-					int response = JOptionPane.showOptionDialog(PrismMain.get_Prism_DesktopPane(), combined_panel,
+					int response = JOptionPane.showOptionDialog(Prism2Main.get_Prism_DesktopPane(), combined_panel,
 							"Select yield tables columns to show", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
 							IconHandle.get_scaledImageIcon(50, 50, "icon_binoculars.png"), ExitOption, ExitOption[0]);
 
